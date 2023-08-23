@@ -1,8 +1,8 @@
 package com.springboot.intro;
 
-import java.math.BigDecimal;
 import com.springboot.intro.model.Book;
 import com.springboot.intro.service.BookService;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 public class IntroApplication {
     @Autowired
     private BookService bookService;
+
     public static void main(String[] args) {
         SpringApplication.run(IntroApplication.class, args);
     }
