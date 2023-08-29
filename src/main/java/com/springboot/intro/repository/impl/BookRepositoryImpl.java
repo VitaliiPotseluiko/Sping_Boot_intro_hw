@@ -1,5 +1,6 @@
 package com.springboot.intro.repository.impl;
 
+import com.springboot.intro.exception.EntityNotFoundException;
 import com.springboot.intro.model.Book;
 import com.springboot.intro.repository.BookRepository;
 import java.util.List;
@@ -46,6 +47,8 @@ public class BookRepositoryImpl implements BookRepository {
     public Optional<Book> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(Book.class, id));
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Can't find book by id " + id);
         }
     }
 
