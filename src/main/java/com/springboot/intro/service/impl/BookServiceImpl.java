@@ -45,7 +45,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponseDto update(Long id, BookRequestDto bookRequestDto) {
         if (bookRepository.existsById(id)) {
-            Book book = bookRepository.getReferenceById(id);
+            Book book = bookRepository.findById(id).get();
             book.setPrice(bookRequestDto.getPrice());
             book.setTitle(bookRequestDto.getTitle());
             book.setAuthor(bookRequestDto.getAuthor());
