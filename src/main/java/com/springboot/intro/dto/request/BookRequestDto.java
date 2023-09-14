@@ -1,18 +1,19 @@
 package com.springboot.intro.dto.request;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.ISBN;
 
 @Data
 public class BookRequestDto {
-    @NotNull
+    @NotBlank(message = "title can't be black")
     private String title;
-    @NotNull
+    @NotBlank(message = "author can't be black")
     private String author;
-    @NotNull
+    @NotBlank(message = "isbn can't be black")
     @ISBN
     private String isbn;
     @NotNull
