@@ -4,6 +4,7 @@ import com.springboot.intro.dto.request.BookRequestDto;
 import com.springboot.intro.dto.response.BookResponseDto;
 import com.springboot.intro.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -33,26 +34,48 @@ public class BookController {
 
     @PostMapping
     @Operation(summary = "Create a new book", description = "Create a new book")
-    public BookResponseDto save(@RequestBody @Valid BookRequestDto bookRequestDto) {
+    public BookResponseDto save(@Parameter(
+            description = "request dto for book",
+            name = "bookRequestDto",
+            required = true
+    ) @RequestBody @Valid BookRequestDto bookRequestDto) {
         return bookService.save(bookRequestDto);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Get book by id")
-    public BookResponseDto getBookById(@PathVariable Long id) {
+    public BookResponseDto getBookById(@Parameter(
+            description = "id of certain book",
+            name = "id",
+            required = true,
+            example = "1"
+    ) @PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete book by id", description = "Delete book by id")
-    public void deleteById(@PathVariable Long id) {
+    public void deleteById(@Parameter(
+            description = "id of certain book",
+            name = "id",
+            required = true,
+            example = "1"
+    ) @PathVariable Long id) {
         bookService.deleteById(id);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Update book by id")
-    public BookResponseDto update(@PathVariable Long id,
-                                  @RequestBody @Valid BookRequestDto requestDto) {
+    public BookResponseDto update(@Parameter(
+            description = "id of certain book",
+            name = "id",
+            required = true,
+            example = "1"
+    ) @PathVariable Long id, @Parameter(
+            description = "request dto for book",
+            name = "requestDto",
+            required = true
+    ) @RequestBody @Valid BookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
 }
