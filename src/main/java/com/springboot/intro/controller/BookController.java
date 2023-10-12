@@ -5,6 +5,8 @@ import com.springboot.intro.dto.response.BookResponseDto;
 import com.springboot.intro.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -35,9 +37,9 @@ public class BookController {
     @PostMapping
     @Operation(summary = "Create a new book", description = "Create a new book")
     public BookResponseDto save(@Parameter(
-            description = "request dto for book",
-            name = "bookRequestDto",
-            required = true
+            description = "Object for creating a new book",
+            required = true,
+            content = @Content(schema = @Schema(implementation = BookRequestDto.class))
     ) @RequestBody @Valid BookRequestDto bookRequestDto) {
         return bookService.save(bookRequestDto);
     }
@@ -72,9 +74,9 @@ public class BookController {
             required = true,
             example = "1"
     ) @PathVariable Long id, @Parameter(
-            description = "request dto for book",
-            name = "requestDto",
-            required = true
+            description = "Object for creating a new book",
+            required = true,
+            content = @Content(schema = @Schema(implementation = BookRequestDto.class))
     ) @RequestBody @Valid BookRequestDto requestDto) {
         return bookService.update(id, requestDto);
     }
