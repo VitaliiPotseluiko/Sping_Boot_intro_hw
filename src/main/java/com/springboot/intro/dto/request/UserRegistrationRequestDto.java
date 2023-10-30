@@ -4,15 +4,16 @@ import com.springboot.intro.validation.Email;
 import com.springboot.intro.validation.FieldMatch;
 import com.springboot.intro.validation.Password;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 @FieldMatch
 public class UserRegistrationRequestDto {
-    @NotBlank(message = "email can't be blank")
+    @NotNull
     @Email
     private String email;
-    @NotBlank(message = "password can't be blank")
+    @NotNull
     @Password
     private String password;
     @NotBlank(message = "repeated password can't be blank")

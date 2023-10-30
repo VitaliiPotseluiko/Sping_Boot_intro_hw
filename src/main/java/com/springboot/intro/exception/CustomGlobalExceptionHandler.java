@@ -51,28 +51,24 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> entityNotFound(EntityNotFoundException ex) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("timestamp", LocalDateTime.now().format(formatter));
-        map.put("status", HttpStatus.NOT_FOUND);
-        map.put("error", ex.getMessage());
-        return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+        return getObjectResponseEntity(ex, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> registrationError(RegistrationException ex) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("timestamp", LocalDateTime.now().format(formatter));
-        map.put("status", HttpStatus.BAD_REQUEST);
-        map.put("error", ex.getMessage());
-        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        return getObjectResponseEntity(ex, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<Object> userNotFoundException(UsernameNotFoundException ex) {
+        return getObjectResponseEntity(ex, HttpStatus.NOT_FOUND);
+    }
+
+    private ResponseEntity<Object> getObjectResponseEntity(Exception ex, HttpStatus status) {
         Map<String, Object> map = new HashMap<>();
         map.put("timestamp", LocalDateTime.now().format(formatter));
-        map.put("status", HttpStatus.NOT_FOUND);
+        map.put("status", status);
         map.put("error", ex.getMessage());
-        return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(map, status);
     }
 }

@@ -43,8 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
             throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new RegistrationException("User with email "
-                    + requestDto.getEmail() + " is already registered!");
+            throw new RegistrationException("User is already registered!");
         }
         User user = userMapper.toModel(requestDto);
         Set<Role> roles = new HashSet<>();
