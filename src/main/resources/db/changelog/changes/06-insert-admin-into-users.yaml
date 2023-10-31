@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-admin
+      author: vitalii
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "admin@gmail.com"}
+              - column: {name: password, value: "$2a$12$aY8LMB1asfITC6VjWcz4vOzUTz17jWH3sYU5S0mSv0NbfVwtwX4Ha"}
+              - column: {name: first_name, value: "Administrator"}
+              - column: {name: last_name, value: "MainPerson"}
+              - column: {name: shipping_address, value: "777 Main St, Kiev, Ukraine"}
