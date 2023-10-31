@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @FieldMatch
 public class UserRegistrationRequestDto {
-    @NotNull
+    @NotBlank
     @Email
     private String email;
     @NotNull
