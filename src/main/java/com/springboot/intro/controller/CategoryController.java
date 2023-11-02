@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +46,8 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     @Operation(summary = "Get all categories", description = "Get all available categories")
-    public List<CategoryResponseDto> getAll() {
-        return categoryService.findAll();
+    public List<CategoryResponseDto> getAll(Pageable pageable) {
+        return categoryService.findAll(pageable);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -91,7 +92,13 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}/books")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategory(@PathVariable Long id) {
-        return bookService.getBooksByCategory(id);
+    @Operation(summary = "Get books by category", description = "Get all books by category id")
+    public List<BookDtoWithoutCategoryIds> getBooksByCategory(@Parameter(
+            description = "id of certain category",
+            name = "id",
+            required = true,
+            example = "1"
+    ) @PathVariable Long id, Pageable pageable) {
+        return bookService.getBooksByCategory(id, pageable);
     }
 }
