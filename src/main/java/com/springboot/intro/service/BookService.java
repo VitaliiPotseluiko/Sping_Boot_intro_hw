@@ -1,6 +1,7 @@
 package com.springboot.intro.service;
 
 import com.springboot.intro.dto.request.BookRequestDto;
+import com.springboot.intro.dto.response.BookDtoWithoutCategoryIds;
 import com.springboot.intro.dto.response.BookResponseDto;
 import com.springboot.intro.model.Book;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,7 @@ public interface BookService {
     void deleteById(Long id);
 
     BookResponseDto update(Long id, BookRequestDto bookRequestDto);
+
+    List<BookDtoWithoutCategoryIds> getBooksByCategory(Long categoryId);
+
 }
