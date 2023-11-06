@@ -23,6 +23,6 @@ public class Category {
     @NotNull
     private String name;
     private String description;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted;
 }
