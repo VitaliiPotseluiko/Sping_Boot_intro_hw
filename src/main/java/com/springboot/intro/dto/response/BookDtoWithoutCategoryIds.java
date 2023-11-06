@@ -1,12 +1,10 @@
 package com.springboot.intro.dto.response;
 
 import java.math.BigDecimal;
-import java.util.Set;
-
 import lombok.Data;
 
 @Data
-public class BookResponseDto {
+public class BookDtoWithoutCategoryIds {
     private Long id;
     private String title;
     private String author;
@@ -14,5 +12,4 @@ public class BookResponseDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    private Set<Long> categoryIds;
 }

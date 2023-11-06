@@ -80,7 +80,7 @@ public class BookController {
             required = true,
             example = "1"
     ) @PathVariable Long id, @Parameter(
-            description = "Object for creating a new book",
+            description = "Object for updating a new book",
             required = true,
             content = @Content(schema = @Schema(implementation = BookRequestDto.class))
     ) @RequestBody @Valid BookRequestDto requestDto) {
