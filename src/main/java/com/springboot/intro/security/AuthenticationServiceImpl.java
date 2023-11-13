@@ -13,6 +13,8 @@ import com.springboot.intro.repository.UserRepository;
 import com.springboot.intro.security.jwt.JwtUtil;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.springboot.intro.service.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,6 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public UserLoginResponseDto login(UserLoginRequestDto requestDto) {
@@ -50,7 +53,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         roles.add(roleRepository.findByName(Role.RoleName.USER));
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        shoppingCartService.registerNewShoppingCart(savedUser);
         return userMapper.toDto(user);
     }
 }
