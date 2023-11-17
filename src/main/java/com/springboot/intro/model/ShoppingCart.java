@@ -41,8 +41,8 @@ public class ShoppingCart {
     private User user;
     @HashCodeExclude
     @EqualsExclude
-    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> cartItems;
     @Column(nullable = false)
     private boolean isDeleted;

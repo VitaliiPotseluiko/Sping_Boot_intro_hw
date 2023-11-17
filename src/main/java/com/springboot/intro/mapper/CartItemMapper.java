@@ -13,5 +13,4 @@ public interface CartItemMapper {
     @Mapping(source = "book.title", target = "bookTitle")
     @Mapping(source = "quantity", target = "quantity")
     CartItemResponseDto toDto(CartItem cartItem);
-
 }

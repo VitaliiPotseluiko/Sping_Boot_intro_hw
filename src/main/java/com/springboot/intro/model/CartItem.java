@@ -1,7 +1,6 @@
 package com.springboot.intro.model;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,21 +13,17 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Getter
 @Setter
 @ToString
-@SQLDelete(sql = "UPDATE cart_items SET is_deleted = true WHERE id=?")
-@Where(clause = "is_deleted=false")
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.PERSIST})
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCart shoppingCart;
     @OneToOne
@@ -36,6 +31,4 @@ public class CartItem {
     private Book book;
     @NotNull
     private Integer quantity;
-    @Column(nullable = false)
-    private boolean isDeleted;
 }
