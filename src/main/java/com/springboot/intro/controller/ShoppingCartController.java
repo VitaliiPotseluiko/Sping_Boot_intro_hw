@@ -1,8 +1,7 @@
 package com.springboot.intro.controller;
 
-import com.springboot.intro.dto.request.AddRequestCartItemDto;
-import com.springboot.intro.dto.request.BookRequestDto;
-import com.springboot.intro.dto.request.UpdatedRequestCartItemDto;
+import com.springboot.intro.dto.request.AddCartItemRequestDto;
+import com.springboot.intro.dto.request.UpdateCartItemRequestDto;
 import com.springboot.intro.dto.response.ShoppingCartResponseDto;
 import com.springboot.intro.model.User;
 import com.springboot.intro.service.ShoppingCartService;
@@ -49,8 +48,8 @@ public class ShoppingCartController {
             @Parameter(
                     description = "Object for adding to shopping cart",
                     required = true,
-                    content = @Content(schema = @Schema(implementation = AddRequestCartItemDto.class))
-            ) @RequestBody @Valid AddRequestCartItemDto cartItemDto) {
+                    content = @Content(schema = @Schema(implementation = AddCartItemRequestDto.class))
+            ) @RequestBody @Valid AddCartItemRequestDto cartItemDto) {
         User user = getUser(authentication);
         shoppingCartService.addBookToShoppingCart(cartItemDto, user);
         return shoppingCartService.getByUser(user);
@@ -65,8 +64,8 @@ public class ShoppingCartController {
             @Parameter(
                     description = "Object for updating book quantity in shopping cart",
                     required = true,
-                    content = @Content(schema = @Schema(implementation = UpdatedRequestCartItemDto.class))
-            ) @RequestBody @Valid UpdatedRequestCartItemDto updatedRequestCartItemDto,
+                    content = @Content(schema = @Schema(implementation = UpdateCartItemRequestDto.class))
+            ) @RequestBody @Valid UpdateCartItemRequestDto updateCartItemRequestDto,
             @Parameter(
                     description = "id of certain cart item of shopping cart",
                     name = "cartItemId",
@@ -74,7 +73,7 @@ public class ShoppingCartController {
                     example = "1"
             ) @PathVariable Long cartItemId) {
         User user = getUser(authentication);
-        shoppingCartService.updateCartItems(updatedRequestCartItemDto, user, cartItemId);
+        shoppingCartService.updateBookQuantity(updateCartItemRequestDto, user, cartItemId);
         return shoppingCartService.getByUser(user);
     }
 

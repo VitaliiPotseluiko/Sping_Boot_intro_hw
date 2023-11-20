@@ -1,5 +1,6 @@
 package com.springboot.intro.service.impl;
 
+import com.springboot.intro.exception.EntityNotFoundException;
 import com.springboot.intro.model.User;
 import com.springboot.intro.repository.UserRepository;
 import com.springboot.intro.service.UserService;
@@ -13,6 +14,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByName(String username) {
-        return userRepository.findByEmail(username).orElseThrow();
+        return userRepository.findByEmail(username).orElseThrow(
+                () -> new EntityNotFoundException("Can't find user in DB!")
+        );
     }
 }

@@ -39,7 +39,7 @@ public class Book {
     private BigDecimal price;
     private String description;
     private String coverImage;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_deleted")
     private boolean isDeleted;
     @ToStringExclude
     @HashCodeExclude

@@ -1,11 +1,12 @@
 package com.springboot.intro.service.impl;
 
-import com.springboot.intro.dto.request.AddRequestCartItemDto;
-import com.springboot.intro.dto.request.UpdatedRequestCartItemDto;
+import com.springboot.intro.dto.request.AddCartItemRequestDto;
+import com.springboot.intro.dto.request.UpdateCartItemRequestDto;
 import com.springboot.intro.dto.response.ShoppingCartResponseDto;
 import com.springboot.intro.exception.EntityNotFoundException;
 import com.springboot.intro.mapper.CartItemMapper;
 import com.springboot.intro.mapper.ShoppingCartMapper;
+import com.springboot.intro.model.Book;
 import com.springboot.intro.model.CartItem;
 import com.springboot.intro.model.ShoppingCart;
 import com.springboot.intro.model.User;
@@ -37,33 +38,33 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void addBookToShoppingCart(AddRequestCartItemDto requestCartItemDto, User user) {
+    public void addBookToShoppingCart(AddCartItemRequestDto requestCartItemDto, User user) {
         ShoppingCart shoppingCart = findShoppingCart(user);
         CartItem cartItem = new CartItem();
         cartItem.setShoppingCart(shoppingCart);
-        cartItem.setBook(bookRepository.findById(requestCartItemDto.getBookId()).orElseThrow(
+        Book book = bookRepository.findById(requestCartItemDto.getBookId()).orElseThrow(
                 () -> new EntityNotFoundException("Can't find book by id "
-                        + requestCartItemDto.getBookId())
-        ));
+                        + requestCartItemDto.getBookId()));
+        cartItem.setBook(book);
         cartItem.setQuantity(requestCartItemDto.getQuantity());
         shoppingCart.getCartItems().add(cartItemRepository.save(cartItem));
         shoppingCartRepository.save(shoppingCart);
     }
 
     @Override
-    public void updateCartItems(UpdatedRequestCartItemDto updatedRequestCartItemDto,
-                                User user,
-                                Long cartItemId) {
+    public void updateBookQuantity(UpdateCartItemRequestDto updateCartItemRequestDto,
+                                   User user,
+                                   Long cartItemId) {
         ShoppingCart shoppingCart = findShoppingCart(user);
         Set<CartItem> cartItemSet = shoppingCart.getCartItems();
         if (cartItemSet.stream()
-                .filter(c -> c.getId().equals(cartItemId))
+                .filter(cartItem -> cartItem.getId().equals(cartItemId))
                 .findFirst().isEmpty()) {
             throw new EntityNotFoundException("Can't find cart item by id " + cartItemId);
         }
         for (CartItem cartItem : cartItemSet) {
             if (cartItem.getId().equals(cartItemId)) {
-                cartItem.setQuantity(updatedRequestCartItemDto.getQuantity());
+                cartItem.setQuantity(updateCartItemRequestDto.getQuantity());
                 break;
             }
         }
