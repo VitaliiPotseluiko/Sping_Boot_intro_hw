@@ -72,7 +72,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteCartItem(User user, Long cartItemId) {
+    public void deleteBookFromShoppingCart(User user, Long cartItemId) {
         ShoppingCart shoppingCart = findShoppingCart(user);
         Set<CartItem> cartItemSet = shoppingCart.getCartItems();
         CartItem cartItem = cartItemSet.stream()

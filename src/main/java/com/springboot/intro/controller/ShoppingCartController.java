@@ -81,7 +81,7 @@ public class ShoppingCartController {
     @DeleteMapping("/cart-items/{cartItemId}")
     @Operation(summary = "Delete book from shopping cart",
             description = "Delete book from shopping cart of certain user")
-    public ShoppingCartResponseDto deleteCartItem(
+    public ShoppingCartResponseDto deleteBookFromShoppingCart(
             Authentication authentication,
             @Parameter(
                     description = "id of certain cart item of shopping cart",
@@ -90,7 +90,7 @@ public class ShoppingCartController {
                     example = "1"
             ) @PathVariable Long cartItemId) {
         User user = getUser(authentication);
-        shoppingCartService.deleteCartItem(user, cartItemId);
+        shoppingCartService.deleteBookFromShoppingCart(user, cartItemId);
         return shoppingCartService.getByUser(user);
     }
 
