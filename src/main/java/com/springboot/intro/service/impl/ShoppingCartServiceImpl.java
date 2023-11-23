@@ -13,6 +13,7 @@ import com.springboot.intro.model.User;
 import com.springboot.intro.repository.BookRepository;
 import com.springboot.intro.repository.CartItemRepository;
 import com.springboot.intro.repository.ShoppingCartRepository;
+import com.springboot.intro.repository.UserRepository;
 import com.springboot.intro.service.ShoppingCartService;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,12 +29,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void registerNewShoppingCart(User user) {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
-        shoppingCart.setCartItems(new HashSet<>());
         shoppingCartRepository.save(shoppingCart);
     }
 
