@@ -1,10 +1,10 @@
 package com.springboot.intro.dto.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class CreateOrderRequestDto {
-    @NotNull
+    @NotBlank
     private String shippingAddress;
 }

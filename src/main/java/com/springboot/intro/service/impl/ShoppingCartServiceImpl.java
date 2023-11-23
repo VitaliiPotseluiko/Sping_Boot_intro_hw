@@ -13,11 +13,8 @@ import com.springboot.intro.model.User;
 import com.springboot.intro.repository.BookRepository;
 import com.springboot.intro.repository.CartItemRepository;
 import com.springboot.intro.repository.ShoppingCartRepository;
-import com.springboot.intro.repository.UserRepository;
 import com.springboot.intro.service.ShoppingCartService;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +26,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
 
     @Override
     public void registerNewShoppingCart(User user) {
@@ -88,13 +84,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    public void clearShoppingCart(ShoppingCart shoppingCart) {
+        Set<CartItem> cartItems = shoppingCart.getCartItems();
+        cartItems.clear();
+        shoppingCart.setCartItems(cartItems);
+        shoppingCartRepository.save(shoppingCart);
+    }
+
+    @Override
     public ShoppingCartResponseDto getByUser(User user) {
-        ShoppingCart shoppingCart = findShoppingCart(user);
-        ShoppingCartResponseDto responseDto = shoppingCartMapper.toDto(shoppingCart);
-        responseDto.setCartItemSet(shoppingCart.getCartItems().stream()
-                .map(cartItemMapper::toDto)
-                .collect(Collectors.toSet()));
-        return responseDto;
+        return shoppingCartMapper.toDto(findShoppingCart(user));
+    }
+
+    @Override
+    public ShoppingCart getShoppingCart(User user) {
+        return findShoppingCart(user);
     }
 
     private ShoppingCart findShoppingCart(User user) {

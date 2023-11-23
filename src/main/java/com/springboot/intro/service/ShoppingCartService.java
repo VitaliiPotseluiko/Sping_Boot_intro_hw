@@ -16,6 +16,10 @@ public interface ShoppingCartService {
 
     void deleteBookFromShoppingCart(User user, Long cartItemId);
 
+    void clearShoppingCart(ShoppingCart shoppingCart);
+
     ShoppingCartResponseDto getByUser(User user);
+
+    ShoppingCart getShoppingCart(User user);
 
 }

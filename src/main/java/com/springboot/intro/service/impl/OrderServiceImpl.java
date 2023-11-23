@@ -13,7 +13,7 @@ import com.springboot.intro.model.ShoppingCart;
 import com.springboot.intro.model.User;
 import com.springboot.intro.repository.OrderItemRepository;
 import com.springboot.intro.repository.OrderRepository;
-import com.springboot.intro.repository.ShoppingCartRepository;
+import com.springboot.intro.service.ShoppingCartService;
 import com.springboot.intro.service.OrderService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,11 +29,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
-    private final ShoppingCartRepository shoppingCartRepository;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public OrderResponseDto createOrder(User user, CreateOrderRequestDto requestDto) {
-        ShoppingCart shoppingCart = getShoppingCart(user);
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(user);
         Order order = new Order();
         order.setUser(user);
         order.setStatus(Order.Status.COMPLETED);
@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(total);
         Order savedOrder = orderRepository.save(order);
         Set<OrderItem> orderItems = createOrderItems(shoppingCart, savedOrder);
+        shoppingCartService.clearShoppingCart(shoppingCart);
         savedOrder.setOrderItems(orderItems);
         return orderMapper.toDto(savedOrder);
     }
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderItemResponseDto> getAllBooksByOrderId(User user, Long orderId) {
         return orderMapper.toDto(orderRepository.findOrderByUserAndId(user, orderId).orElseThrow(
-                () -> new EntityNotFoundException("Can't items of order by id " + orderId)))
+                        () -> new EntityNotFoundException("Can't items of order by id " + orderId)))
                 .getOrderItems().stream()
                 .toList();
     }
@@ -81,12 +82,6 @@ public class OrderServiceImpl implements OrderService {
                 .filter(orderItemResponseDto -> orderItemResponseDto.getId().equals(itemId))
                 .findFirst().orElseThrow(
                         () -> new EntityNotFoundException("Can't find item by id " + itemId));
-    }
-
-    private ShoppingCart getShoppingCart(User user) {
-        return shoppingCartRepository.findByUser(user).orElseThrow(
-                () -> new EntityNotFoundException("Can't find shopping cart for "
-                        + "user " + user.getLastName()));
     }
 
     private Set<OrderItem> createOrderItems(ShoppingCart shoppingCart, Order order) {
@@ -100,13 +95,6 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setQuantity(cartItem.getQuantity());
             orderItems.add(orderItemRepository.save(orderItem));
         }
-        clearShoppingCart(shoppingCart, cartItems);
         return orderItems;
-    }
-
-    private void clearShoppingCart(ShoppingCart shoppingCart, Set<CartItem> cartItems) {
-        cartItems.clear();
-        shoppingCart.setCartItems(cartItems);
-        shoppingCartRepository.save(shoppingCart);
     }
 }
