@@ -4,7 +4,6 @@ import com.springboot.intro.dto.request.AddCartItemRequestDto;
 import com.springboot.intro.dto.request.UpdateCartItemRequestDto;
 import com.springboot.intro.dto.response.ShoppingCartResponseDto;
 import com.springboot.intro.exception.EntityNotFoundException;
-import com.springboot.intro.mapper.CartItemMapper;
 import com.springboot.intro.mapper.ShoppingCartMapper;
 import com.springboot.intro.model.Book;
 import com.springboot.intro.model.CartItem;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
-    private final CartItemMapper cartItemMapper;
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
 
