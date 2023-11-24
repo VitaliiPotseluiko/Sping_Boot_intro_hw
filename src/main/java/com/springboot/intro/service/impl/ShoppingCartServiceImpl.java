@@ -36,7 +36,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void addBookToShoppingCart(AddCartItemRequestDto requestCartItemDto, User user) {
-        ShoppingCart shoppingCart = findShoppingCart(user);
+        ShoppingCart shoppingCart = getShoppingCart(user);
         CartItem cartItem = new CartItem();
         cartItem.setShoppingCart(shoppingCart);
         Book book = bookRepository.findById(requestCartItemDto.getBookId()).orElseThrow(
@@ -52,7 +52,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void updateBookQuantity(UpdateCartItemRequestDto updateCartItemRequestDto,
                                    User user,
                                    Long cartItemId) {
-        ShoppingCart shoppingCart = findShoppingCart(user);
+        ShoppingCart shoppingCart = getShoppingCart(user);
         Set<CartItem> cartItemSet = shoppingCart.getCartItems();
         if (cartItemSet.stream()
                 .filter(cartItem -> cartItem.getId().equals(cartItemId))
@@ -70,7 +70,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void deleteBookFromShoppingCart(User user, Long cartItemId) {
-        ShoppingCart shoppingCart = findShoppingCart(user);
+        ShoppingCart shoppingCart = getShoppingCart(user);
         Set<CartItem> cartItemSet = shoppingCart.getCartItems();
         CartItem cartItem = cartItemSet.stream()
                 .filter(c -> c.getId().equals(cartItemId))
@@ -93,15 +93,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartResponseDto getByUser(User user) {
-        return shoppingCartMapper.toDto(findShoppingCart(user));
+        return shoppingCartMapper.toDto(getShoppingCart(user));
     }
 
     @Override
     public ShoppingCart getShoppingCart(User user) {
-        return findShoppingCart(user);
-    }
-
-    private ShoppingCart findShoppingCart(User user) {
         return shoppingCartRepository.findByUser(user).orElseThrow(
                 () -> new EntityNotFoundException("Can't find shopping cart for "
                         + "user " + user.getLastName()));
