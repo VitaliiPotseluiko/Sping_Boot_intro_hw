@@ -3,6 +3,7 @@ package com.springboot.intro.service;
 import com.springboot.intro.dto.request.AddCartItemRequestDto;
 import com.springboot.intro.dto.request.UpdateCartItemRequestDto;
 import com.springboot.intro.dto.response.ShoppingCartResponseDto;
+import com.springboot.intro.model.ShoppingCart;
 import com.springboot.intro.model.User;
 
 public interface ShoppingCartService {
@@ -15,6 +16,10 @@ public interface ShoppingCartService {
 
     void deleteBookFromShoppingCart(User user, Long cartItemId);
 
+    void clearShoppingCart(ShoppingCart shoppingCart);
+
     ShoppingCartResponseDto getByUser(User user);
+
+    ShoppingCart getShoppingCart(User user);
 
 }

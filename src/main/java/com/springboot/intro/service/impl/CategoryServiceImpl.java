@@ -7,9 +7,8 @@ import com.springboot.intro.mapper.CategoryMapper;
 import com.springboot.intro.model.Category;
 import com.springboot.intro.repository.CategoryRepository;
 import com.springboot.intro.service.CategoryService;
-import lombok.RequiredArgsConstructor;
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

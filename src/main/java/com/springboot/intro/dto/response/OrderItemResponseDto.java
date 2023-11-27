@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CartItemResponseDto {
+public class OrderItemResponseDto {
     private Long id;
     private Long bookId;
-    private String bookTitle;
     private int quantity;
 }
