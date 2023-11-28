@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  db:
+  mysql-database:
     image: mysql
     restart: unless-stopped
     env_file: ./.env
@@ -11,9 +11,9 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE
     ports:
       - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
-  app:
+  backend:
     depends_on:
-      - db
+      - mysql-database
     restart: on-failure
     image: books-service
     build: .
