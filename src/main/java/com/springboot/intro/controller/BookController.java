@@ -1,6 +1,7 @@
 package com.springboot.intro.controller;
 
 import com.springboot.intro.dto.request.BookRequestDto;
+import com.springboot.intro.dto.request.BookSearchParametersDto;
 import com.springboot.intro.dto.response.BookResponseDto;
 import com.springboot.intro.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,5 +86,11 @@ public class BookController {
             content = @Content(schema = @Schema(implementation = BookRequestDto.class))
     ) @RequestBody @Valid BookRequestDto requestDto) {
         return bookService.update(id, requestDto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/search")
+    public List<BookResponseDto> searchBooks(BookSearchParametersDto parametersDto) {
+        return bookService.search(parametersDto);
     }
 }
