@@ -90,7 +90,12 @@ public class BookController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/search")
-    public List<BookResponseDto> searchBooks(BookSearchParametersDto parametersDto) {
+    @Operation(summary = "Search books", description = "Search book by specific criteria")
+    public List<BookResponseDto> searchBooks(@Parameter(
+            description = "Object that includes criteria for searching books",
+            required = true,
+            content = @Content(schema = @Schema(implementation = BookSearchParametersDto.class))
+    ) BookSearchParametersDto parametersDto) {
         return bookService.search(parametersDto);
     }
 }

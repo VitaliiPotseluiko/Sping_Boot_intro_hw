@@ -1,5 +1,6 @@
 package com.springboot.intro.specification.book;
 
+import com.springboot.intro.exception.SpecificationNotFoundException;
 import com.springboot.intro.model.Book;
 import com.springboot.intro.specification.provider.SpecificationProvider;
 import com.springboot.intro.specification.SpecificationProviderManager;
@@ -19,7 +20,7 @@ public class BookSpecificationProviderManager implements SpecificationProviderMa
                 .filter(p -> p.getKey().equals(key))
                 .findFirst()
                 .orElseThrow(
-                        () -> new RuntimeException(
+                        () -> new SpecificationNotFoundException(
                                 "Can't find correct specification provider for key " + key)
                 );
     }
