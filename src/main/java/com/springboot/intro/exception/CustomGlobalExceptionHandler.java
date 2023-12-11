@@ -64,6 +64,11 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return getObjectResponseEntity(ex, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(SpecificationNotFoundException.class)
+    public ResponseEntity<Object> specificationNotFoundException(SpecificationNotFoundException ex) {
+        return getObjectResponseEntity(ex, HttpStatus.NOT_FOUND);
+    }
+
     private ResponseEntity<Object> getObjectResponseEntity(Exception ex, HttpStatus status) {
         Map<String, Object> map = new HashMap<>();
         map.put("timestamp", LocalDateTime.now().format(formatter));

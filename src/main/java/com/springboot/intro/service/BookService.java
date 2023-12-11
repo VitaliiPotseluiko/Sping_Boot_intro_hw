@@ -1,6 +1,7 @@
 package com.springboot.intro.service;
 
 import com.springboot.intro.dto.request.BookRequestDto;
+import com.springboot.intro.dto.request.BookSearchParametersDto;
 import com.springboot.intro.dto.response.BookDtoWithoutCategoryIds;
 import com.springboot.intro.dto.response.BookResponseDto;
 import com.springboot.intro.model.Book;
@@ -20,5 +21,7 @@ public interface BookService {
     BookResponseDto update(Long id, BookRequestDto bookRequestDto);
 
     List<BookDtoWithoutCategoryIds> getBooksByCategory(Long categoryId, Pageable pageable);
+
+    List<BookResponseDto> search(BookSearchParametersDto parametersDto);
 
 }
