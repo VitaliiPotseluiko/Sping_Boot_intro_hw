@@ -9,19 +9,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.ISBN;
 
 @Data
+@Accessors(chain = true)
 public class BookRequestDto {
-    @NotBlank(message = "title can't be black")
+    @NotBlank(message = "can't be blank")
     private String title;
-    @NotBlank(message = "author can't be black")
+    @NotBlank(message = "can't be blank")
     private String author;
-    @NotBlank(message = "isbn can't be black")
+    @NotBlank(message = "can't be blank")
     @ISBN
     private String isbn;
     @NotNull
-    @Min(0)
+    @Min(value = 0, message = "must be bigger than 0")
     private BigDecimal price;
     private String description;
     private String coverImage;
