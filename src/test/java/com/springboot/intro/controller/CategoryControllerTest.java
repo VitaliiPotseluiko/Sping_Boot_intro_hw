@@ -2,6 +2,7 @@ package com.springboot.intro.controller;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,6 +41,7 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CategoryControllerTest {
+    private static final String CATEGORIES_PATH = "/api/categories";
     protected static MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -86,14 +88,12 @@ class CategoryControllerTest {
         CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
         categoryRequestDto.setName("Fiction");
         categoryRequestDto.setDescription("Fiction books");
-
         CategoryResponseDto expected = new CategoryResponseDto();
         expected.setName(categoryRequestDto.getName());
         expected.setDescription(categoryRequestDto.getDescription());
-
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
 
-        MvcResult result = mockMvc.perform(post("/api/categories")
+        MvcResult result = mockMvc.perform(post(CATEGORIES_PATH)
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -101,9 +101,10 @@ class CategoryControllerTest {
                 .andReturn();
         CategoryResponseDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), CategoryResponseDto.class);
+
         assertNotNull(actual);
         assertNotNull(actual.getId());
-        EqualsBuilder.reflectionEquals(expected, actual,"id");
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual,"id"));
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -115,10 +116,10 @@ class CategoryControllerTest {
         CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
         categoryRequestDto.setName("");
         categoryRequestDto.setDescription("Fiction books");
-
+        String expectedError = "name can't be blank";
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
 
-        MvcResult result = mockMvc.perform(post("/api/categories")
+        MvcResult result = mockMvc.perform(post(CATEGORIES_PATH)
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -126,7 +127,8 @@ class CategoryControllerTest {
                 .andReturn();
         ErrorValidationDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 ErrorValidationDto.class);
-        assertEquals("name can't be blank", actual.getErrors()[0]);
+
+        assertEquals(expectedError, actual.getErrors()[0]);
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatus());
     }
 
@@ -141,12 +143,13 @@ class CategoryControllerTest {
         expected.add(new CategoryResponseDto(2L, "Action", "d2"));
         expected.add(new CategoryResponseDto(3L, "Thriller", "d3"));
 
-        MvcResult result = mockMvc.perform(get("/api/categories")
+        MvcResult result = mockMvc.perform(get(CATEGORIES_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
         CategoryResponseDto[] actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 CategoryResponseDto[].class);
+
         assertEquals(expected.size(), actual.length);
         assertEquals(expected, Arrays.stream(actual).toList());
     }
@@ -160,18 +163,23 @@ class CategoryControllerTest {
         CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
         categoryRequestDto.setName("Poems");
         categoryRequestDto.setDescription("about poems");
-
+        CategoryResponseDto expected = new CategoryResponseDto(
+                null,
+                categoryRequestDto.getName(),
+                categoryRequestDto.getDescription()
+        );
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
 
-        MvcResult result = mockMvc.perform(put("/api/categories/2")
+        MvcResult result = mockMvc.perform(put(CATEGORIES_PATH.concat("/2"))
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
         CategoryResponseDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 CategoryResponseDto.class);
+
         assertEquals(2, actual.getId());
-        EqualsBuilder.reflectionEquals(categoryRequestDto, actual, "id");
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -182,17 +190,18 @@ class CategoryControllerTest {
     public void updateCategory_InvalidRequestDto_BadRequest() throws Exception {
         CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
         categoryRequestDto.setDescription("about poems");
-
+        String expectedError = "name can't be blank";
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
 
-        MvcResult result = mockMvc.perform(put("/api/categories/2")
+        MvcResult result = mockMvc.perform(put(CATEGORIES_PATH.concat("/2"))
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
         ErrorValidationDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 ErrorValidationDto.class);
-        assertEquals("name can't be blank", actual.getErrors()[0]);
+
+        assertEquals(expectedError, actual.getErrors()[0]);
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatus());
     }
 
@@ -205,17 +214,18 @@ class CategoryControllerTest {
         CategoryRequestDto categoryRequestDto = new CategoryRequestDto();
         categoryRequestDto.setName("Poems");
         categoryRequestDto.setDescription("about poems");
-
+        String expectedError = "There is no such category by id 4";
         String jsonRequest = objectMapper.writeValueAsString(categoryRequestDto);
 
-        MvcResult result = mockMvc.perform(put("/api/categories/4")
+        MvcResult result = mockMvc.perform(put(CATEGORIES_PATH.concat("/4"))
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
         StatusErrorDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 StatusErrorDto.class);
-        assertEquals("There is no such category by id 4", actual.getError());
+
+        assertEquals(expectedError, actual.getError());
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatus());
     }
 }
