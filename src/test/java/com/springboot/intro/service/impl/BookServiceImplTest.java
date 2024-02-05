@@ -2,6 +2,7 @@ package com.springboot.intro.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -82,7 +83,7 @@ class BookServiceImplTest {
         when(bookMapper.toDto(book)).thenReturn(responseDto);
 
         BookResponseDto actual = bookService.getBookById(1L);
-        EqualsBuilder.reflectionEquals(responseDto, actual);
+        assertTrue(EqualsBuilder.reflectionEquals(responseDto, actual));
     }
 
     @Test
@@ -115,7 +116,7 @@ class BookServiceImplTest {
         when(bookMapper.toDto(book)).thenReturn(responseDto);
 
         BookResponseDto actual = bookService.save(requestDto);
-        EqualsBuilder.reflectionEquals(book, actual);
+        assertTrue(EqualsBuilder.reflectionEquals(responseDto, actual));
     }
 
     @Test
