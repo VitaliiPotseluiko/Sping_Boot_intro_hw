@@ -196,7 +196,7 @@ class BookControllerTest {
                 .setCoverImage("cow6")
                 .setDescription("d6")
                 .setCategoryId(2L);
-        List<String> expectedErrors = List.of( "author can't be blank", "title can't be blank");
+        List<String> expectedErrors = List.of("author can't be blank", "title can't be blank");
         String jsonRequest = objectMapper.writeValueAsString(expected);
 
         MvcResult result = mockMvc.perform(put(BOOKS_PATH.concat("/4"))
