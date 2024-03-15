@@ -298,7 +298,7 @@ class ShoppingCartControllerTest {
     @WithUserDetails(USER_NAME)
     @Test
     @DisplayName("""
-            delete cart item by id = 5
+            delete cart item by id = 5 
             """)
     public void deleteBookFromShoppingCart_NotExistingCartItem_NotFound() throws Exception {
         String expected = "Can't find cart item by id 5";
