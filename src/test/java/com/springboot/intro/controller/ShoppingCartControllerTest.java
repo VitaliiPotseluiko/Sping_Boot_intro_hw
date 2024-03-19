@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.intro.config.ContextInitializer;
 import com.springboot.intro.dto.ErrorValidationDto;
 import com.springboot.intro.dto.StatusErrorDto;
 import com.springboot.intro.dto.request.AddCartItemRequestDto;
@@ -36,6 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -44,6 +45,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(initializers = ContextInitializer.class)
 class ShoppingCartControllerTest {
     private static final String SHOPPING_CART_PATH = "/api/cart";
     private static final String USER_NAME = "useremail";
@@ -256,7 +258,7 @@ class ShoppingCartControllerTest {
     @WithUserDetails(USER_NAME)
     @Test
     @DisplayName("""
-            not existing cart item 
+            not existing cart item
             """)
     public void updateBookQuantity_NotExistingCartItem_NotFound() throws Exception {
         UpdateCartItemRequestDto requestDto = new UpdateCartItemRequestDto();
