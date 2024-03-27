@@ -1,0 +1,14 @@
+insert into categories (id, name, description) values (1, 'Fiction', 'd1');
+insert into books (id, title, author, isbn, price, description, cover_image) values (1, 'Title1', 'Author1', '978-1-2345-6789-7', 10.9, 'd1', 'cov1');
+insert into books (id, title, author, isbn, price, description, cover_image) values (2, 'Title2', 'Author2', '978-2-266-11156-0', 20.9, 'd1', 'cov2');
+insert into books (id, title, author, isbn, price, description, cover_image) values (3, 'Title3', 'Author3', '979-0-2600-0043-8', 30.9, 'd2', 'cov3');
+insert into books_categories (book_id, category_id) values (1, 1);
+insert into books_categories (book_id, category_id) values (2, 1);
+insert into books_categories (book_id, category_id) values (3, 1);
+insert into roles (id, name) values (1, 'USER');
+insert into users (id, email, password, first_name, last_name, shipping_address) values (1, 'useremail', 'userpassword', 'userF', 'userL', 'usershipaddress');
+insert into users_roles (user_id, role_id) values(1, 1);
+insert into shopping_carts (id, user_id) values (1, 1);
+insert into cart_items (id, shopping_cart_id, book_id, quantity) values (1, 1, 1, 10);
+insert into cart_items (id, shopping_cart_id, book_id, quantity) values (2, 1, 2, 20);
+insert into cart_items (id, shopping_cart_id, book_id, quantity) values (3, 1, 3, 30);
